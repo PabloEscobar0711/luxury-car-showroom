@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Car placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111111" />
+      <stop offset="100%" stop-color="#2d2416" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c9a14b" />
+      <stop offset="100%" stop-color="#f0d5a0" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" rx="36" fill="url(#bg)" />
+  <circle cx="178" cy="306" r="48" fill="#090909" stroke="#c9a14b" stroke-width="10" />
+  <circle cx="458" cy="306" r="48" fill="#090909" stroke="#c9a14b" stroke-width="10" />
+  <path d="M142 278h367c13 0 23-10 23-23v-17c0-16-11-30-27-34l-73-17-54-73c-10-14-26-22-43-22H220c-16 0-30 7-40 20l-46 62-63 17c-18 5-31 21-31 40v24c0 13 10 23 23 23h79" fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="18" />
+  <path d="M190 174h187l42 57H147z" fill="rgba(255,255,255,0.06)" stroke="#f0d5a0" stroke-width="8" />
+  <text x="50%" y="76%" fill="#f0d5a0" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" letter-spacing="4">AURUM MOTORS</text>
+</svg>

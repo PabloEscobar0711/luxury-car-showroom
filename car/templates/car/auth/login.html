@@ -1,0 +1,45 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Login | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="section-shell auth-shell">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5" data-reveal>
+                <div class="glass-panel form-panel auth-panel">
+                    <div class="panel-heading">
+                        <span class="eyebrow">Account access</span>
+                        <h1>Login to continue</h1>
+                        <p>Use your Django-powered customer account to manage wishlists and test drive requests.</p>
+                    </div>
+                    <form method="post" class="luxury-form">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+                                {{ form.password }}
+                            </div>
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="form-error-list mt-3">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-luxury mt-3 w-100">Login</button>
+                    </form>
+                    <p class="auth-footer-text">
+                        New here? <a href="{% url 'car:signup' %}">Create an account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

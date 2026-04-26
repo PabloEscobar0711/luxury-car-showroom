@@ -1,0 +1,85 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Compare Cars | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">Comparison studio</span>
+            <h1>Side-by-side vehicle comparison</h1>
+            <p>Compare up to three luxury cars with specs laid out for quick decision-making.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container" data-reveal>
+        <div class="comparison-shell glass-panel">
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Specification</th>
+                            {% for car in cars %}
+                                <th>
+                                    <div class="comparison-car-head">
+                                        <img src="{{ car.primary_image_url }}" alt="{{ car.name }}">
+                                        <div>
+                                            <span class="eyebrow">{{ car.brand.name }}</span>
+                                            <h2>{{ car.name }}</h2>
+                                            <p>&#8377;{{ car.price|floatformat:0 }}</p>
+                                        </div>
+                                    </div>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Model year</td>
+                            {% for car in cars %}<td>{{ car.model_year }}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Fuel type</td>
+                            {% for car in cars %}<td>{{ car.fuel_type }}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Transmission</td>
+                            {% for car in cars %}<td>{{ car.transmission }}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Mileage</td>
+                            {% for car in cars %}<td>{{ car.mileage }}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Engine</td>
+                            {% for car in cars %}<td>{{ car.engine|default:"On request" }}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Horsepower</td>
+                            {% for car in cars %}<td>{% if car.horsepower %}{{ car.horsepower }} hp{% else %}On request{% endif %}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Top speed</td>
+                            {% for car in cars %}<td>{% if car.top_speed %}{{ car.top_speed }} km/h{% else %}On request{% endif %}</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Seating</td>
+                            {% for car in cars %}<td>{{ car.seating_capacity|default:"4+" }} seats</td>{% endfor %}
+                        </tr>
+                        <tr>
+                            <td>Actions</td>
+                            {% for car in cars %}
+                                <td>
+                                    <a href="{{ car.get_absolute_url }}" class="btn btn-luxury">View Details</a>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

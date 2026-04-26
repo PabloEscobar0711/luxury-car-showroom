@@ -1,0 +1,75 @@
+{% extends 'car/base.html' %}
+
+{% block title %}About | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">About the showroom</span>
+            <h1>A premium Django case study for luxury automotive portfolios.</h1>
+            <p>The project stays fully inside Django, HTML, CSS, JavaScript, and Bootstrap while offering a much richer product experience.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7" data-reveal>
+                <div class="glass-panel story-card">
+                    <span class="eyebrow">Why it works</span>
+                    <h2>Refactored for scale and real client demos</h2>
+                    <p>
+                        The application now supports brand normalization, unlimited gallery images, account-based
+                        customer actions, live AJAX catalog filtering, comparison tools, and protected booking flows.
+                    </p>
+                    <p>
+                        The design direction keeps the original black and gold identity, but lifts it with glass panels,
+                        motion, depth, and conversion-focused card interactions suitable for portfolio and freelancing work.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-5" data-reveal>
+                <div class="glass-panel story-card accent-card">
+                    <span class="eyebrow">Operational highlights</span>
+                    <ul class="timeline-list">
+                        <li>Normalized inventory models for brand and gallery scale</li>
+                        <li>Built-in authentication with protected wishlist and bookings</li>
+                        <li>Database-backed contact leads and admin approval workflow</li>
+                        <li>Deployment-friendly settings with environment variables and secure defaults</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-heading section-heading-left mt-5" data-reveal>
+            <span class="eyebrow">Brand roster</span>
+            <h2>Curated luxury marques in the current inventory</h2>
+        </div>
+        <div class="row g-4">
+            {% for brand in brands %}
+                <div class="col-md-6 col-xl-4" data-reveal>
+                    <div class="glass-panel brand-stat-card">
+                        <div class="brand-stat-header">
+                            <span class="brand-initial">{{ brand.name|slice:":1" }}</span>
+                            <div>
+                                <h3>{{ brand.name }}</h3>
+                                <p>{{ brand.car_count }} model{{ brand.car_count|pluralize }}</p>
+                            </div>
+                        </div>
+                        <a href="{% url 'car:car_list' %}?brand={{ brand.pk }}" class="text-link">Explore brand</a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="glass-panel empty-state">
+                        <i class="fa-solid fa-star"></i>
+                        <h3>No brands available yet.</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

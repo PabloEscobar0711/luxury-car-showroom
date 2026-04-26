@@ -1,0 +1,30 @@
+# Image Setup Instructions
+
+Since this is a code-only environment, you need to add car images manually.
+
+## Option 1: Use the images from the search results
+Download luxury car images from stock photo websites like:
+- Unsplash.com (search for BMW, Mercedes, Audi, Rolls-Royce, Porsche)
+- Pexels.com
+- Pixabay.com
+
+## Option 2: Quick Setup
+1. Create 10 sample images (any car images)
+2. Name them: car1.jpg, car2.jpg, car3.jpg, ... car10.jpg
+3. Place them in the media/cars/ folder
+4. Run the setup_data.py script
+5. Login to admin panel
+6. Edit each car and upload the corresponding images
+
+## Image Requirements:
+- Format: JPG or PNG
+- Recommended size: 1200x800 pixels
+- File size: Under 500KB for optimal performance
+
+## After adding images:
+The website will automatically display them on:
+- Homepage (featured cars)
+- Car listing page
+- Car detail page with gallery
+
+Note: The project is fully functional without images, they just won't display until added.

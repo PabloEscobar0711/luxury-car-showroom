@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Aurum Motors | Luxury Car Showroom{% endblock %}</title>
+    <meta name="description" content="Premium luxury car showroom built with Django, Bootstrap, HTML, CSS and JavaScript.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'car/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-login-url="{% url 'car:login' %}">
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-mark">
+            <span class="loader-ring"></span>
+            <span class="loader-text">Preparing the showroom</span>
+        </div>
+    </div>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="floating-feedback" id="floatingFeedback" aria-live="polite"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark premium-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand brand-lockup" href="{% url 'car:home' %}">
+                <span class="brand-mark">AM</span>
+                <span class="brand-text">
+                    <span class="brand-name">Aurum Motors</span>
+                    <span class="brand-tagline">Luxury showroom experience</span>
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'car:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'car_list' %}active{% endif %}" href="{% url 'car:car_list' %}">Collection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'car:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'car:contact' %}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link compare-nav-link" id="navCompareLink" href="{% url 'car:car_list' %}#compare-studio" data-compare-url="{% url 'car:compare' %}">
+                            Compare
+                            <span class="badge text-bg-warning ms-1" data-compare-count>0</span>
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}" href="{% url 'car:wishlist' %}">
+                                Wishlist
+                                <span class="badge text-bg-warning ms-1" data-wishlist-count>{{ wishlist_count }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'my_bookings' %}active{% endif %}" href="{% url 'car:my_bookings' %}">Bookings</a>
+                        </li>
+                        <li class="nav-item nav-user-greeting">Hi, {{ request.user.first_name|default:request.user.username }}</li>
+                        <li class="nav-item ms-lg-3">
+                            <form method="post" action="{% url 'car:logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-luxury-outline">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'car:login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-luxury ms-lg-3" href="{% url 'car:signup' %}">Create Account</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+        <section class="messages-shell">
+            <div class="container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} luxury-alert alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <main class="site-shell">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="premium-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h3 class="footer-title">Aurum Motors</h3>
+                    <p class="footer-copy">
+                        A premium-ready Django luxury showroom with curated inventory, concierge booking,
+                        live comparison, and dealership lead capture.
+                    </p>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <h4 class="footer-heading">Explore</h4>
+                    <a href="{% url 'car:home' %}">Home</a>
+                    <a href="{% url 'car:car_list' %}">Collection</a>
+                    <a href="{% url 'car:about' %}">About</a>
+                    <a href="{% url 'car:contact' %}">Contact</a>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="footer-heading">Customer Area</h4>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'car:wishlist' %}">Wishlist</a>
+                        <a href="{% url 'car:my_bookings' %}">My bookings</a>
+                    {% else %}
+                        <a href="{% url 'car:login' %}">Login</a>
+                        <a href="{% url 'car:signup' %}">Create account</a>
+                    {% endif %}
+                    <a href="/admin/" target="_blank" rel="noreferrer">Admin dashboard</a>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="footer-heading">Concierge Desk</h4>
+                    <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+                    <p><i class="fa-solid fa-envelope"></i> concierge@aurummotors.com</p>
+                    <p><i class="fa-solid fa-location-dot"></i> Mumbai, India</p>
+                    <div class="footer-socials">
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Aurum Motors. Crafted for premium automotive portfolios.</span>
+                <span>Deploy-ready for Render or Railway</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.showroomConfig = {
+            compareUrl: "{% url 'car:compare' %}",
+            loginUrl: "{% url 'car:login' %}",
+            csrfToken: "{{ csrf_token }}",
+            isAuthenticated: {{ request.user.is_authenticated|yesno:"true,false" }}
+        };
+    </script>
+    <script src="{% static 'car/js/app.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,87 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Collection | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">Inventory studio</span>
+            <h1>Search, filter, compare, and shortlist premium cars instantly.</h1>
+            <p>Live AJAX results keep the browsing experience smooth without page reloads.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <form id="catalogFilters" class="glass-panel filter-panel" data-endpoint="{% url 'car:car_list' %}">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-3">
+                    <label class="form-label" for="{{ filter_form.q.id_for_label }}">Search</label>
+                    {{ filter_form.q }}
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label" for="{{ filter_form.brand.id_for_label }}">Brand</label>
+                    {{ filter_form.brand }}
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label" for="{{ filter_form.fuel_type.id_for_label }}">Fuel Type</label>
+                    {{ filter_form.fuel_type }}
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label" for="{{ filter_form.min_price.id_for_label }}">Min Price</label>
+                    {{ filter_form.min_price }}
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label" for="{{ filter_form.max_price.id_for_label }}">Max Price</label>
+                    {{ filter_form.max_price }}
+                </div>
+                <div class="col-lg-1 d-grid">
+                    <button type="button" class="btn btn-luxury-outline" id="resetFilters">Reset</button>
+                </div>
+            </div>
+            {% if filter_form.non_field_errors %}
+                <div class="form-error-list mt-3">
+                    {% for error in filter_form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+
+        <div class="compare-studio glass-panel" id="compare-studio" data-reveal>
+            <div>
+                <span class="eyebrow">Comparison studio</span>
+                <h2>Select any 2 to 3 cars from the grid below.</h2>
+                <p class="mb-0">Selections are remembered in the browser while you keep browsing.</p>
+            </div>
+            <div class="compare-actions">
+                <span class="compare-count"><strong id="compareCount">0</strong> / 3 selected</span>
+                <a href="#" class="btn btn-luxury disabled" id="compareLaunch" aria-disabled="true">Compare Selected</a>
+                <button type="button" class="btn btn-luxury-outline" id="clearCompare">Clear</button>
+            </div>
+        </div>
+
+        <div class="catalog-toolbar">
+            <p class="catalog-result-count" id="catalogResultCount">{{ total_count }} cars available</p>
+            <span class="catalog-hint">Hover a card for a fast detail action.</span>
+        </div>
+
+        <div class="row g-4" id="catalogResults">
+            {% include 'car/partials/car_cards.html' with cars=page_obj.object_list wishlist_ids=wishlist_ids %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button
+                type="button"
+                class="btn btn-luxury {% if not page_obj.has_next %}d-none{% endif %}"
+                id="loadMoreButton"
+                {% if page_obj.has_next %}data-next-page="{{ page_obj.next_page_number }}"{% endif %}
+            >
+                Load More Cars
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}

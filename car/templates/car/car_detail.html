@@ -1,0 +1,196 @@
+{% extends 'car/base.html' %}
+
+{% block title %}{{ car.brand.name }} {{ car.name }} | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero detail-hero">
+    <div class="container">
+        <div class="detail-hero-head" data-reveal>
+            <div>
+                <span class="eyebrow">{{ car.brand.name }}</span>
+                <h1>{{ car.name }}</h1>
+                <p class="hero-subtitle">Premium detail page with gallery, booking, dealer enquiry, and related inventory.</p>
+            </div>
+            <div class="detail-price-block glass-panel">
+                <span>Ex-showroom</span>
+                <strong>&#8377;{{ car.price|floatformat:0 }}</strong>
+                <small>{{ car.model_year }} model year</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-7" data-reveal>
+                <div class="gallery-shell glass-panel">
+                    <img
+                        src="{{ car.primary_image_url }}"
+                        alt="{{ car.brand.name }} {{ car.name }}"
+                        class="car-detail-image"
+                        id="primaryGalleryImage"
+                    >
+                    <div class="thumbnail-strip">
+                        {% for image in car.gallery %}
+                            <button
+                                type="button"
+                                class="thumbnail-button {% if forloop.first %}is-active{% endif %}"
+                                data-gallery-thumb
+                                data-image="{{ image.image.url }}"
+                            >
+                                <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:car.name }}">
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5" data-reveal>
+                <div class="glass-panel detail-sidebar">
+                    <div class="detail-header-row">
+                        <div>
+                            <span class="eyebrow">Vehicle overview</span>
+                            <h2>{{ car.brand.name }} {{ car.name }}</h2>
+                        </div>
+                        <form
+                            method="post"
+                            action="{% url 'car:toggle_wishlist' car.slug %}"
+                            class="wishlist-form"
+                            data-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+                            data-car-id="{{ car.pk }}"
+                        >
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button
+                                type="submit"
+                                class="wishlist-toggle detail-wishlist-toggle {% if is_wishlisted %}is-active{% endif %}"
+                                aria-label="Toggle wishlist for {{ car.name }}"
+                                aria-pressed="{% if is_wishlisted %}true{% else %}false{% endif %}"
+                            >
+                                <i class="{% if is_wishlisted %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <p class="detail-copy">{{ car.description }}</p>
+
+                    <div class="spec-table">
+                        <div><span>Brand</span><strong>{{ car.brand.name }}</strong></div>
+                        <div><span>Fuel type</span><strong>{{ car.fuel_type }}</strong></div>
+                        <div><span>Transmission</span><strong>{{ car.transmission }}</strong></div>
+                        <div><span>Mileage</span><strong>{{ car.mileage }}</strong></div>
+                        <div><span>Engine</span><strong>{{ car.engine|default:"Premium tuned" }}</strong></div>
+                        <div><span>Horsepower</span><strong>{% if car.horsepower %}{{ car.horsepower }} hp{% else %}On request{% endif %}</strong></div>
+                        <div><span>Top speed</span><strong>{% if car.top_speed %}{{ car.top_speed }} km/h{% else %}On request{% endif %}</strong></div>
+                        <div><span>Seating</span><strong>{{ car.seating_capacity|default:"4+" }} seats</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <div class="col-lg-6" id="booking-panel" data-reveal>
+                <div class="glass-panel form-panel">
+                    <div class="panel-heading">
+                        <span class="eyebrow">Test drive booking</span>
+                        <h2>Reserve a private viewing</h2>
+                    </div>
+                    {% if request.user.is_authenticated %}
+                        <form method="post" class="luxury-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="booking">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label" for="{{ booking_form.preferred_date.id_for_label }}">Preferred date</label>
+                                    {{ booking_form.preferred_date }}
+                                    {% for error in booking_form.preferred_date.errors %}
+                                        <div class="field-error">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="{{ booking_form.notes.id_for_label }}">Notes</label>
+                                    {{ booking_form.notes }}
+                                    {% for error in booking_form.notes.errors %}
+                                        <div class="field-error">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-luxury mt-3">Request Test Drive</button>
+                        </form>
+                    {% else %}
+                        <div class="empty-state compact">
+                            <i class="fa-solid fa-user-lock"></i>
+                            <h3>Login required</h3>
+                            <p>Booking requests are available to signed-in users so bookings stay tied to a real account.</p>
+                            <a href="{% url 'car:login' %}?next={{ request.path|urlencode }}" class="btn btn-luxury">Login to Continue</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6" id="contact-panel" data-reveal>
+                <div class="glass-panel form-panel">
+                    <div class="panel-heading">
+                        <span class="eyebrow">Contact dealer</span>
+                        <h2>Send a direct enquiry</h2>
+                    </div>
+                    <form method="post" class="luxury-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="contact">
+                        {{ contact_form.car }}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ contact_form.name.id_for_label }}">Name</label>
+                                {{ contact_form.name }}
+                                {% for error in contact_form.name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ contact_form.email.id_for_label }}">Email</label>
+                                {{ contact_form.email }}
+                                {% for error in contact_form.email.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ contact_form.phone.id_for_label }}">Phone</label>
+                                {{ contact_form.phone }}
+                                {% for error in contact_form.phone.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ contact_form.subject.id_for_label }}">Subject</label>
+                                {{ contact_form.subject }}
+                                {% for error in contact_form.subject.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ contact_form.message.id_for_label }}">Message</label>
+                                {{ contact_form.message }}
+                                {% for error in contact_form.message.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-luxury mt-3">Send Enquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if related_cars %}
+            <div class="section-heading section-heading-left mt-5" data-reveal>
+                <span class="eyebrow">Related inventory</span>
+                <h2>More from {{ car.brand.name }}</h2>
+            </div>
+            <div class="row g-4">
+                {% include 'car/partials/car_cards.html' with cars=related_cars wishlist_ids=wishlist_ids %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Aurum Motors | Premium Luxury Car Showroom{% endblock %}
+
+{% block content %}
+<section class="hero-section" style="--hero-image: url('{% if hero_car %}{{ hero_car.primary_image_url }}{% endif %}');">
+    <div class="hero-ambient"></div>
+    <div class="container hero-layout">
+        <div class="hero-copy" data-reveal>
+            <span class="eyebrow">Premium automotive concierge</span>
+            <h1 class="hero-title">Luxury inventory with a portfolio-grade buying experience.</h1>
+            <p class="hero-subtitle">
+                Explore flagship sedans, grand tourers, and bespoke performance cars with live comparison,
+                wishlist management, and concierge-led test drive bookings.
+            </p>
+            <div class="hero-actions">
+                <a href="{% url 'car:car_list' %}" class="btn btn-luxury">Explore Collection</a>
+                <a href="{% url 'car:contact' %}" class="btn btn-luxury-outline">Contact Dealer</a>
+            </div>
+            <div class="hero-metrics">
+                <div class="metric-card glass-panel">
+                    <strong>{{ inventory_count }}</strong>
+                    <span>Luxury cars listed</span>
+                </div>
+                <div class="metric-card glass-panel">
+                    <strong>{{ brand_count }}</strong>
+                    <span>Curated premium brands</span>
+                </div>
+                <div class="metric-card glass-panel">
+                    <strong>{{ pending_bookings }}</strong>
+                    <span>Live booking requests</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-highlight glass-panel" data-reveal>
+            {% if hero_car %}
+                <span class="highlight-label">Spotlight</span>
+                <h2>{{ hero_car.brand.name }} {{ hero_car.name }}</h2>
+                <p>{{ hero_car.description|truncatewords:30 }}</p>
+                <ul class="highlight-specs">
+                    <li><i class="fa-solid fa-calendar"></i> {{ hero_car.model_year }}</li>
+                    <li><i class="fa-solid fa-gas-pump"></i> {{ hero_car.fuel_type }}</li>
+                    <li><i class="fa-solid fa-gears"></i> {{ hero_car.transmission }}</li>
+                </ul>
+                <a href="{{ hero_car.get_absolute_url }}" class="text-link">See spotlight details</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <span class="eyebrow">Featured inventory</span>
+            <h2>Curated arrivals for discerning buyers</h2>
+            <p>Every card below supports compare, wishlist, and direct detail exploration.</p>
+        </div>
+        <div class="row g-4">
+            {% include 'car/partials/car_cards.html' with cars=featured_cars wishlist_ids=wishlist_ids %}
+        </div>
+        <div class="text-center mt-4" data-reveal>
+            <a href="{% url 'car:car_list' %}" class="btn btn-luxury">View Full Collection</a>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell section-dark">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <span class="eyebrow">Brand curation</span>
+            <h2>Global luxury marques with tailored showroom support</h2>
+        </div>
+        <div class="row g-4">
+            {% for brand in brand_stats %}
+                <div class="col-md-6 col-lg-4" data-reveal>
+                    <div class="glass-panel brand-stat-card">
+                        <div class="brand-stat-header">
+                            <span class="brand-initial">{{ brand.name|slice:":1" }}</span>
+                            <div>
+                                <h3>{{ brand.name }}</h3>
+                                <p>{{ brand.car_count }} model{{ brand.car_count|pluralize }} available</p>
+                            </div>
+                        </div>
+                        <a href="{% url 'car:car_list' %}?brand={{ brand.pk }}" class="text-link">Browse {{ brand.name }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4" data-reveal>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-gem"></i>
+                    <h3>Luxury-first interface</h3>
+                    <p>Black and gold visual language, glassmorphism panels, loader animation, and polished hover states.</p>
+                </div>
+            </div>
+            <div class="col-lg-4" data-reveal>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-heart"></i>
+                    <h3>Logged-in customer journeys</h3>
+                    <p>Wishlist management, account-based bookings, and protected actions built on Django authentication.</p>
+                </div>
+            </div>
+            <div class="col-lg-4" data-reveal>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-code-compare"></i>
+                    <h3>Sales-ready utilities</h3>
+                    <p>Live AJAX filters, side-by-side comparison, and lead capture flows designed for freelancing clients.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Wishlist | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">Saved cars</span>
+            <h1>Your shortlist</h1>
+            <p>Manage favorite cars before moving into comparison or booking.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <div class="row g-4">
+            {% for item in wishlist_items %}
+                <div class="col-md-6 col-xl-4" data-reveal>
+                    <article class="car-card glass-panel">
+                        <div class="car-card-media">
+                            <img src="{{ item.car.primary_image_url }}" alt="{{ item.car.name }}" class="car-image">
+                            <div class="car-card-overlay">
+                                <a href="{{ item.car.get_absolute_url }}" class="btn btn-overlay">View Details</a>
+                            </div>
+                        </div>
+                        <div class="car-card-body">
+                            <span class="eyebrow">{{ item.car.brand.name }}</span>
+                            <h3>{{ item.car.name }}</h3>
+                            <p class="car-price">&#8377;{{ item.car.price|floatformat:0 }}</p>
+                            <div class="spec-grid">
+                                <span><i class="fa-solid fa-gas-pump"></i> {{ item.car.fuel_type }}</span>
+                                <span><i class="fa-solid fa-gears"></i> {{ item.car.transmission }}</span>
+                            </div>
+                            <div class="card-actions-row">
+                                <a href="{{ item.car.get_absolute_url }}" class="btn btn-luxury">Open Car</a>
+                                <form method="post" action="{% url 'car:toggle_wishlist' item.car.slug %}" class="wishlist-form" data-authenticated="true" data-car-id="{{ item.car.pk }}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    <button type="submit" class="btn btn-luxury-outline">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col-12" data-reveal>
+                    <div class="glass-panel empty-state">
+                        <i class="fa-regular fa-heart"></i>
+                        <h3>Your wishlist is empty.</h3>
+                        <p>Start exploring the collection and save the cars that deserve a second look.</p>
+                        <a href="{% url 'car:car_list' %}" class="btn btn-luxury">Browse Cars</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

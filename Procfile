@@ -1,0 +1,1 @@
+web: gunicorn luxury_car_showroom.wsgi

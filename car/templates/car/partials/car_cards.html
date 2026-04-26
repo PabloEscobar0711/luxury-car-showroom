@@ -1,0 +1,62 @@
+{% for car in cars %}
+    <div class="col-md-6 col-xl-4" data-reveal>
+        <article class="car-card glass-panel">
+            <div class="car-card-media">
+                <img src="{{ car.primary_image_url }}" alt="{{ car.brand.name }} {{ car.name }}" class="car-image">
+                <div class="car-card-overlay">
+                    <a href="{{ car.get_absolute_url }}" class="btn btn-overlay">View Details</a>
+                </div>
+                <div class="car-card-actions">
+                    <label class="compare-chip">
+                        <input type="checkbox" class="compare-checkbox" value="{{ car.pk }}">
+                        <span>Compare</span>
+                    </label>
+                    <form
+                        method="post"
+                        action="{% url 'car:toggle_wishlist' car.slug %}"
+                        class="wishlist-form"
+                        data-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+                        data-car-id="{{ car.pk }}"
+                    >
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button
+                            type="submit"
+                            class="wishlist-toggle {% if car.pk in wishlist_ids %}is-active{% endif %}"
+                            aria-label="Toggle wishlist for {{ car.brand.name }} {{ car.name }}"
+                            aria-pressed="{% if car.pk in wishlist_ids %}true{% else %}false{% endif %}"
+                        >
+                            <i class="{% if car.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="car-card-body">
+                <div class="car-card-header">
+                    <div>
+                        <span class="eyebrow">{{ car.brand.name }}</span>
+                        <h3>{{ car.name }}</h3>
+                    </div>
+                    <span class="car-year">{{ car.model_year }}</span>
+                </div>
+                <p class="car-price">&#8377;{{ car.price|floatformat:0 }}</p>
+                <div class="spec-grid">
+                    <span><i class="fa-solid fa-gas-pump"></i> {{ car.fuel_type }}</span>
+                    <span><i class="fa-solid fa-gears"></i> {{ car.transmission }}</span>
+                    <span><i class="fa-solid fa-road"></i> {{ car.mileage }}</span>
+                    <span><i class="fa-solid fa-chair"></i> {{ car.seating_capacity|default:"4+" }} seats</span>
+                </div>
+                <p class="car-summary">{{ car.description|truncatewords:20 }}</p>
+                <a href="{{ car.get_absolute_url }}" class="text-link">Explore this car</a>
+            </div>
+        </article>
+    </div>
+{% empty %}
+    <div class="col-12">
+        <div class="glass-panel empty-state">
+            <i class="fa-solid fa-car-side"></i>
+            <h3>No cars match the current filters.</h3>
+            <p>Try broadening the price range, changing the brand, or clearing the search.</p>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,95 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Contact Dealer | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">Dealer contact</span>
+            <h1>Talk to the concierge desk.</h1>
+            <p>Every submission is stored in the database for follow-up inside Django admin.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7" data-reveal>
+                <div class="glass-panel form-panel">
+                    <div class="panel-heading">
+                        <span class="eyebrow">Contact dealer</span>
+                        <h2>Send your enquiry</h2>
+                    </div>
+                    <form method="post" class="luxury-form">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.name.id_for_label }}">Name</label>
+                                {{ form.name }}
+                                {% for error in form.name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+                                {{ form.email }}
+                                {% for error in form.email.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+                                {{ form.phone }}
+                                {% for error in form.phone.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.car.id_for_label }}">Interested car</label>
+                                {{ form.car }}
+                                {% for error in form.car.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.subject.id_for_label }}">Subject</label>
+                                {{ form.subject }}
+                                {% for error in form.subject.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="{{ form.message.id_for_label }}">Message</label>
+                                {{ form.message }}
+                                {% for error in form.message.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-luxury mt-3">Send to Dealer</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-5" data-reveal>
+                <div class="glass-panel contact-info-card">
+                    <span class="eyebrow">Visit the showroom</span>
+                    <h2>Mumbai concierge lounge</h2>
+                    <div class="info-stack">
+                        <p><i class="fa-solid fa-location-dot"></i> 123 Luxury Lane, Marine Drive, Mumbai 400001</p>
+                        <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+                        <p><i class="fa-solid fa-envelope"></i> concierge@aurummotors.com</p>
+                        <p><i class="fa-solid fa-clock"></i> Monday to Saturday, 10:00 AM to 8:00 PM</p>
+                    </div>
+                    <div class="contact-card-accent">
+                        <h3>What happens next?</h3>
+                        <p>A dealer advisor reviews the stored enquiry in admin, contacts the lead, and can convert it into a booking workflow.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

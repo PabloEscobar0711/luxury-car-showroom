@@ -1,0 +1,79 @@
+{% extends 'car/base.html' %}
+
+{% block title %}Create Account | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="section-shell auth-shell">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6" data-reveal>
+                <div class="glass-panel form-panel auth-panel">
+                    <div class="panel-heading">
+                        <span class="eyebrow">Customer onboarding</span>
+                        <h1>Create your showroom account</h1>
+                        <p>Save favorites, book test drives, and manage your premium shortlist.</p>
+                    </div>
+                    <form method="post" class="luxury-form">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                                {{ form.first_name }}
+                                {% for error in form.first_name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                                {{ form.last_name }}
+                                {% for error in form.last_name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                                {{ form.username }}
+                                {% for error in form.username.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+                                {{ form.email }}
+                                {% for error in form.email.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.password1.id_for_label }}">Password</label>
+                                {{ form.password1 }}
+                                {% for error in form.password1.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm password</label>
+                                {{ form.password2 }}
+                                {% for error in form.password2.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="form-error-list mt-3">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-luxury mt-3 w-100">Create Account</button>
+                    </form>
+                    <p class="auth-footer-text">
+                        Already registered? <a href="{% url 'car:login' %}">Login instead</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

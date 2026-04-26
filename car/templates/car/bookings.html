@@ -1,0 +1,44 @@
+{% extends 'car/base.html' %}
+
+{% block title %}My Bookings | Aurum Motors{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+    <div class="container">
+        <div class="section-heading section-heading-left" data-reveal>
+            <span class="eyebrow">Customer bookings</span>
+            <h1>Your test drive requests</h1>
+            <p>Bookings are tied to your authenticated profile and can be approved or rejected by admins.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell pt-0">
+    <div class="container">
+        <div class="booking-list">
+            {% for booking in bookings %}
+                <div class="glass-panel booking-card" data-reveal>
+                    <img src="{{ booking.car.primary_image_url }}" alt="{{ booking.car.name }}" class="booking-card-image">
+                    <div class="booking-card-body">
+                        <span class="eyebrow">{{ booking.car.brand.name }}</span>
+                        <h2>{{ booking.car.name }}</h2>
+                        <p class="mb-2">Preferred date: <strong>{{ booking.preferred_date }}</strong></p>
+                        <p class="mb-3">{{ booking.notes|default:"No extra notes were added." }}</p>
+                        <div class="booking-card-footer">
+                            <span class="status-pill status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+                            <a href="{{ booking.car.get_absolute_url }}" class="text-link">View car</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="glass-panel empty-state" data-reveal>
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <h3>No bookings yet.</h3>
+                    <p>Book a private test drive from any car detail page once you find a favorite.</p>
+                    <a href="{% url 'car:car_list' %}" class="btn btn-luxury">Explore Cars</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
