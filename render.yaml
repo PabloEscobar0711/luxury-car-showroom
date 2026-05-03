@@ -8,6 +8,6 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: SECRET_KEY
-        value: your-secret-key-change-this
+        value: django-insecure-change-me-before-production
       - key: DEBUG
         value: "False"
