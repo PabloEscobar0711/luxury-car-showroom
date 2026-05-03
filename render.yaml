@@ -1,7 +1,10 @@
 services:
   - type: web
-    name: luxury-car-showroom
+    name: my-app
     runtime: python
     pythonVersion: "3.11.9"
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn luxury_car_showroom.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
