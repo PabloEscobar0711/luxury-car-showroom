@@ -44,31 +44,6 @@ venv\Scripts\activate
 # On Mac/Linux
 python3 -m venv venv
 source venv/bin/activate
-```
-
-### 3️⃣ Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4️⃣ Run the Server
-```bash
-python manage.py runserver
-```
-
-### 5️⃣ Access the Website
-- **Homepage:** http://127.0.0.1:8000/
-- **Admin Panel:** http://127.0.0.1:8000/admin/
-
----
-
-## 🔑 Admin Credentials
-
-- **Username:** adnan
-- **Password:** adnan@123
-- **Email:** adhasan07@gmail.com
-
----
 
 ## 📂 Project Structure
 
